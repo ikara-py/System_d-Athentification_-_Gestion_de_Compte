@@ -62,4 +62,14 @@ class ProfileController extends Controller
         ],200);
     }
 
+
+    public function distroy(Request $request): JsonResponse{
+        $user = $request->user();
+        $user->tokens()->delete();
+        $user->delete();
+
+        return response()->json([
+            'message' => 'deleted successfully'
+        ],200);
+    }
 }
