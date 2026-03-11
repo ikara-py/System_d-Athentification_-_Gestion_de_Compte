@@ -1,59 +1,329 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel User Authentication API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API built with Laravel and Laravel Sanctum for user identity management, route protection, and profile data handling. Testable via Postman — no frontend required.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Table of Contents
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [API Overview](#api-overview)
+- [Authentication](#authentication)
+- [Profile Management](#profile-management)
+- [API Documentation](#api-documentation)
+- [Testing Scenarios](#testing-scenarios)
+- [Technical Constraints](#technical-constraints)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP >= 8.1
+- Composer
+- MySQL or SQLite
+- Laravel 10+
+- Laravel Sanctum
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Clone the repository:
 
-### Premium Partners
+```bash
+git clone https://github.com/ikara-py/System_d-Athentification_-_Gestion_de_Compte.git
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Install dependencies:
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Copy the environment file:
 
-## Code of Conduct
+```bash
+cp .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Generate the application key:
 
-## Security Vulnerabilities
+```bash
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## Configuration
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Open the `.env` file and configure your database connection:
+
+```env
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=auth_api
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_database_password
+
+```
+
+Run migrations:
+
+```bash
+php artisan migrate
+```
+
+---
+
+## Running the Application
+
+Start the local development server:
+
+```bash
+php artisan serve
+```
+
+The API will be available at `http://127.0.0.1:8000`.
+
+---
+
+## API Overview
+
+### Base URL
+
+```
+http://127.0.0.1:8000/api
+```
+
+### Authentication Method
+
+This API uses token-based authentication via Laravel Sanctum. After a successful login, you will receive a token that must be included in the `Authorization` header of every protected request:
+
+```
+Authorization: Bearer <your_token>
+```
+
+---
+
+## Authentication
+
+### POST /api/register
+
+Creates a new user account.
+
+**Request body (JSON):**
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+```
+
+**Responses:**
+
+| Status | Message |
+|--------|---------|
+| 201 | "Account created successfully" |
+| 422 | Validation error details |
+
+---
+
+### POST /api/login
+
+Authenticates a user and returns an access token.
+
+**Request body (JSON):**
+
+```json
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+**Responses:**
+
+| Status | Message |
+|--------|---------|
+| 200 | "Login successful" + token |
+| 401 | "Invalid credentials" |
+
+---
+
+### POST /api/logout
+
+Logs out the authenticated user and invalidates the current token.
+
+**Headers required:**
+
+```
+Authorization: Bearer <your_token>
+```
+
+**Responses:**
+
+| Status | Message |
+|--------|---------|
+| 200 | "Logout successful" |
+| 401 | "Unauthorized" |
+
+---
+
+## Profile Management
+
+All routes in this section require a valid token in the `Authorization` header. Requests without a valid token will receive a `401 Unauthorized` response.
+
+---
+
+### GET /api/me
+
+Returns the authenticated user's profile.
+
+**Headers required:**
+
+```
+Authorization: Bearer <your_token>
+```
+
+**Responses:**
+
+| Status | Message |
+|--------|---------|
+| 200 | "Profile fetched successfully" + user data |
+| 401 | "Unauthorized" |
+
+---
+
+### PUT /api/me
+
+Updates the authenticated user's name and/or email.
+
+**Headers required:**
+
+```
+Authorization: Bearer <your_token>
+```
+
+**Request body (JSON):**
+
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com"
+}
+```
+
+**Responses:**
+
+| Status | Message |
+|--------|---------|
+| 200 | "Profile updated successfully" |
+| 401 | "Unauthorized" |
+| 422 | Validation error details |
+
+---
+
+### PUT /api/me/password
+
+Changes the authenticated user's password.
+
+**Headers required:**
+
+```
+Authorization: Bearer <your_token>
+```
+
+**Request body (JSON):**
+
+```json
+{
+  "current_password": "old_password",
+  "new_password": "new_password123",
+  "new_password_confirmation": "new_password123"
+}
+```
+
+**Responses:**
+
+| Status | Message |
+|--------|---------|
+| 200 | "Password updated successfully" |
+| 401 | "Unauthorized" |
+| 422 | "Current password is incorrect" or validation error |
+
+---
+
+### DELETE /api/me
+
+Permanently deletes the authenticated user's account.
+
+**Headers required:**
+
+```
+Authorization: Bearer <your_token>
+```
+
+**Responses:**
+
+| Status | Message |
+|--------|---------|
+| 200 | "Account deleted successfully" |
+| 401 | "Unauthorized" |
+
+---
+
+## API Documentation
+
+The API is documented using a Postman Collection. The exported file is located at:
+
+```
+/docs/postman_collection.json
+```
+
+To use it:
+
+1. Open Postman
+2. Click "Import"
+3. Select the file `postman_collection.json`
+4. Set the `base_url` variable to `http://127.0.0.1:8000`
+5. After login, copy the returned token and set it as the `token` variable in the collection
+
+All routes are documented with their expected request bodies, required headers, and all possible HTTP responses. Protected routes are clearly marked as requiring a Bearer token.
+
+---
+
+## Testing Scenarios
+
+The following sequence covers the full test flow for this API:
+
+1. **Register** — `POST /api/register` with valid name, email, and password
+2. **Login** — `POST /api/login` to receive an access token
+3. **Access profile without token** — `GET /api/me` with no Authorization header, must return `401 Unauthorized`
+4. **Access profile with token** — `GET /api/me` with the token, must return the user's profile
+5. **Update profile** — `PUT /api/me` with a new name or email
+6. **Change password** — `PUT /api/me/password` with current and new password
+7. **Logout** — `POST /api/logout` to invalidate the token
+8. **Access profile after logout** — `GET /api/me` with the old token, must return `401 Unauthorized`
+
+---
+
+## Technical Constraints
+
+- Laravel API only — no Blade templates, no frontend
+- Token-based authentication using Laravel Sanctum
+- All inputs are validated on every route
+- HTTP status codes used: `200`, `201`, `401`, `422`
+- Users can only access and modify their own profile
+- Passwords are always hashed using bcrypt — never stored in plain text
+
+## Developer
+
+**Kara Ali**
