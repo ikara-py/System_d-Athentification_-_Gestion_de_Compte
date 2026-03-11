@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -26,7 +27,7 @@ class ProfileController extends Controller
     public function update(Request $request): JsonResponse{
         $user = $request->user();
         $validated = $request->validate([
-            'name' => ['sometimes','required','string','max:255',],$user->id
+            'name' => ['sometimes','required','string','max:255'],
         ]);
 
         $user->update($validated);
@@ -44,7 +45,7 @@ class ProfileController extends Controller
     public function updatePassword(Request $request): JsonResponse{
         $request->validate([
             'current_password' => ['required','string'],
-            'new_password' => ['required', 'confirmed', 'Password::min(8)'],
+            'new_password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
         $user = $request->user();
