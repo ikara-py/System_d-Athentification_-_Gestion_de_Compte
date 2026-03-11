@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function register(Request $request):JsonResponse{
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|unique:user,email',
+            'email' => 'required|string|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -48,7 +48,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'login successful',
-            'token' => $token,
+            'token' => $token->plainTextToken,
             'user' => [
                 'id' =>$user->id,
                 'name' => $user->name,

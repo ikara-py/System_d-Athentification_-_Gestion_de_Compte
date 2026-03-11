@@ -63,7 +63,7 @@ class ProfileController extends Controller
     }
 
 
-    public function distroy(Request $request): JsonResponse{
+    public function destroy(Request $request): JsonResponse{
         $user = $request->user();
         $user->tokens()->delete();
         $user->delete();
