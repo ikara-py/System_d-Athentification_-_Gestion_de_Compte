@@ -1,0 +1,162 @@
+{
+  "info": {
+    "_postman_id": "7f0fd953-1d9e-4ed6-959a-3451e9b63068",
+    "name": "Auth & Profile AP",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53036840",
+    "_collection_link": "https://go.postman.co/collection/53036840-7f0fd953-1d9e-4ed6-959a-3451e9b63068?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"alice@example.com\",\n    \"password\": \"password123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}login",
+          "host": [
+            "{{base_url}}login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Alice Dupont\",\n    \"email\": \"alice@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}register",
+          "host": [
+            "{{base_url}}register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "logout",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "1|hBUqGZCa302kTiC6i4AR4LwO9lA4yykFLSmaP0I9f78afa49",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}logout",
+          "host": [
+            "{{base_url}}logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "me",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "2|nazrH1JzVXQ8Rl86nnDeiFRXzt6kr5UlwMzFDve453bc40d0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"name\": \"Alice Martin\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}me",
+          "host": [
+            "{{base_url}}me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "password",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "2|nazrH1JzVXQ8Rl86nnDeiFRXzt6kr5UlwMzFDve453bc40d0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"current_password\": \"password123\",\n    \"new_password\": \"newpass456\",\n    \"new_password_confirmation\": \"newpass456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}me/password",
+          "host": [
+            "{{base_url}}me"
+          ],
+          "path": [
+            "password"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
